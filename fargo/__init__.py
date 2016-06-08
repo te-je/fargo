@@ -41,7 +41,16 @@ def main(search, replacement, repo, version):
     )
 
 
-def find_and_replace(search, replacement, *, repo='.'):
+def find_and_replace(search, replacement, *, repo='.', chardet_threshold=0.8,
+                     fallback_encoding=None, force_encoding=None):
     """Find and replace items inside tracked files
     """
     raise NotImplementedError
+
+
+def _iter_repo_files(repo):
+    repo = path.abspath(repo)
+    repo = dulwich.Repo(repo)
+    for filename in repo.open_index():
+        filename = filename.decode(sys.getfilesystemencoding())
+        yield path.join(repo, filename)

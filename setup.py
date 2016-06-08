@@ -43,7 +43,8 @@ setup(
     use_scm_version={"write_to": "fargo/VERSION.txt"},
 
     packages=find_packages(exclude=['test']),
-    install_requires=['Click~=6.6'],
+    install_requires=['Click~=6.6', 'chardet~=2.3.0', 'colorama~=0.3.7',
+                      'dulwich~=0.13.0'],
 
     extras_require={},
 
