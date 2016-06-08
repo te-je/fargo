@@ -43,15 +43,13 @@ setup(
     use_scm_version={"write_to": "fargo/VERSION.txt"},
 
     packages=find_packages(exclude=['test']),
-    install_requires=[],
+    install_requires=['Click~=6.6'],
 
-    extras_require={
-    },
+    extras_require={},
 
     package_data={
         'fargo': ['VERSION.txt'],
     },
 
-    entry_points={
-    },
+    entry_points={},
 )
