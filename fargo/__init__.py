@@ -31,14 +31,8 @@ def _check_and_show_version(_, __, is_set):
 @click.argument('replacement', nargs=1)
 @click.argument('repo', nargs=1, required=False, default='.',
                 type=click.Path(file_okay=False))
-def main(search, replacement, repo, version):
-    assert not version
-
-    find_and_replace(
-        search,
-        replacement,
-        repo=repo
-    )
+def main(**kwargs):
+    find_and_replace(**kwargs)
 
 
 def find_and_replace(search, replacement, *, repo='.', chardet_threshold=0.8,
