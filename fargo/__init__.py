@@ -26,17 +26,20 @@ def _check_and_show_version(_, __, is_set):
 
 @click.command()
 @click.option('--version', '-V', is_flag=True,
+              help="show the version number and exit.",
               callback=_check_and_show_version)
+@click.option('-v', count=True, help="increase the verbosity level.")
 @click.argument('search', nargs=1)
 @click.argument('replacement', nargs=1)
 @click.argument('repo', nargs=1, required=False, default='.',
                 type=click.Path(file_okay=False))
-def main(**kwargs):
+def main(verbose=1, **kwargs):
+    kwargs['verbosity'] = verbose
     find_and_replace(**kwargs)
 
 
 def find_and_replace(search, replacement, *, repo='.', chardet_threshold=0.8,
-                     fallback_encoding=None, force_encoding=None):
+                     fallback_encoding=None, force_encoding=None, verbosity=1):
     """Find and replace items inside tracked files
     """
     raise NotImplementedError
