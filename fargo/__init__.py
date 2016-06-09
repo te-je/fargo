@@ -124,8 +124,7 @@ def find_and_replace(search, replacement, *, repo='.', chardet_threshold=0.95,
         updated_text = ''.join(lines)
 
         if text != updated_text:
-            with open(filename, 'wb') as fh:
-                fh.write(updated_text.encode(encoding))
+            _put_file_contents(filename, updated_text, encoding)
 
 
 def _get_file_contents(filename, chardet_threshold, fallback_encoding):
@@ -148,6 +147,19 @@ def _get_file_contents(filename, chardet_threshold, fallback_encoding):
         return None
     else:
         return encoding, text
+
+
+def _put_file_contents(filename, text, encoding):
+    # Try to encode text with the encoding. If successful, write it out
+    # to the file. Avoids overwriting a file when the text can't be
+    # encoded
+    try:
+        data = text.encode(encoding)
+    except UnicodeEncodeError:
+        return
+    else:
+        with open(filename, 'wb') as fh:
+            fh.write(data)
 
 
 def _get_line_chunks(matches, cursor, replacement, text, use_regex):
