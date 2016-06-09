@@ -52,5 +52,9 @@ setup(
         'fargo': ['VERSION.txt'],
     },
 
-    entry_points={},
+    entry_points={
+        'console_scripts': [
+            'fargo = fargo:main'
+        ]
+    },
 )
