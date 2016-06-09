@@ -6,7 +6,7 @@ from fargo import find_and_replace
 suits = ['\u2660', '\u2665', '\u2666', '\u2663']
 ranks = list(str(i) for i in range(2, 11)) + ['J', 'Q', 'K', 'A']
 deck_text = "This here is a deck of cards man:\n\n{}".format(
-    "\n".join(''.join((r,s)) for s in suits for r in ranks)
+    "\n".join(''.join((r, s)) for s in suits for r in ranks)
 )
 
 

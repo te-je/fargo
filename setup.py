@@ -15,7 +15,11 @@ setup(
     name='fargo',
 
     description='Find and Replace inside a Git repo',
-    long_description=read("README.rst") + "License\n-------\n\n" + read("LICENSE.rst"),
+    long_description="\n\n".join([
+        read("README.rst"),
+        "License\n-------",
+        read("LICENSE.rst")
+    ]),
 
     url='https://github.com/te-je/fargo',
 
