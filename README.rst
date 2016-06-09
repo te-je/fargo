@@ -1,9 +1,9 @@
 fargo
-===============================
+=====
 
-|build-status| |license|
+|license|
 
-Find and Replace inside a Git repo
+.. image:: ./doc/anim.gif
 
 Installation
 ------------
@@ -19,15 +19,30 @@ directly from source, clone the git repository and run the standard
 Dependencies
 ~~~~~~~~~~~~
 
-* Python 2.7+ (including Python 3, via 2to3)
+* Python 3.5+
 
 Usage
 -----
 
-* TODO
+::
+
+  Usage: fargo [OPTIONS] SEARCH [REPLACEMENT] [REPO]
+
+  Options:
+    -V, --version      show the version number and exit.
+    -i, --interactive  run in interactive mode
+    --help             Show this message and exit.
+
+If ``REPLACEMENT`` is omitted, then an empty string is substituted for
+matches (this does *not* perform a simple find -- you can use ``git grep``
+for that and more).
+
+``REPO`` defaults to the current directory. Currently, only Git repos are
+supported.
+
 
 .. |build-status| image:: https://travis-ci.org/te-je/fargo.svg?branch=develop
-    :target: https://travis-ci.org/te-je/fargo
+    :target: https://travis-ci.org/te-je/fargo/branches
     :alt: build status
     :scale: 100%
 
