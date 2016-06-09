@@ -90,6 +90,18 @@ sequence numbers. For example, entering ``2`` above will result in the line:
 :literal:`\ is not the same as meeting ME in person. It's`.
 
 
+Unicode support
+~~~~~~~~~~~~~~~
+
+Fargo supports unicode text subsitutions. Sort of. Fargo tries to guess the
+encoding of every file that it reads (using chardet). If it can't make a
+confident guess, then the file is ignored.
+
+In cases where Fargo makes substitutions that can't be re-encoded with the
+original encoding, then the subsitutions are ignored and the file is left
+untouched.
+
+
 .. |build-status| image:: https://travis-ci.org/te-je/fargo.svg?branch=develop
     :target: https://travis-ci.org/te-je/fargo/branches
     :alt: build status
