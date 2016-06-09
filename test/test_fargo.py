@@ -22,7 +22,8 @@ def repo(tmpdir):
 
     repo = Repo.init(str(tmpdir))
     repo.stage([b'test_file', b'deck/utf8', b'deck/utf16'])
-    repo.do_commit(b'initial')
+    repo.do_commit(b'initial',
+                   committer=b'Te-je Rodgers <tjd.roders@gmail.com>')
 
     return repo
 
