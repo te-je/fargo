@@ -1,7 +1,7 @@
 fargo
 =====
 
-|license|
+|build-status| |license|
 
 Fargo is a command-line *find and replace* processor for Git repositories.
 It scans all the tracked files in a git repo and performs substitutions
