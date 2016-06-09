@@ -1,5 +1,6 @@
 import re
 import sys
+from codecs import open
 from os import path
 
 import chardet

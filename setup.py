@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from codecs import open
 from setuptools import setup, find_packages
 from os import path
 
@@ -19,7 +20,7 @@ setup(
 
     url='https://github.com/te-je/fargo',
 
-    author='Te-jé Rodgers',
+    author='Te-je Rodgers',
     author_email='tjd.rodgers@gmail.com',
 
     license='MIT',
