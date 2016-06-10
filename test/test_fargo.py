@@ -1,11 +1,12 @@
+import sys
 import pytest
 from dulwich.repo import Repo
 from fargo import find_and_replace
 
 
-suits = ['\u2660', '\u2665', '\u2666', '\u2663']
+suits = [u'\u2660', u'\u2665', u'\u2666', u'\u2663']
 ranks = list(str(i) for i in range(2, 11)) + ['J', 'Q', 'K', 'A']
-deck_text = "This here is a deck of cards man:\n\n{}".format(
+deck_text = u"This here is a deck of cards man:\n\n{}".format(
     "\n".join(''.join((r, s)) for s in suits for r in ranks)
 )
 
@@ -13,14 +14,14 @@ deck_text = "This here is a deck of cards man:\n\n{}".format(
 @pytest.fixture
 def repo(tmpdir):
     test_file = tmpdir.join('test_file')
-    test_file.write("For here we have\nA test file\nwith only useless stuff\n")
+    test_file.write(u"For here we have\nA test file\nwith only useless stuff\n")
 
     # Add some unicode data
     for encoding in ('utf8', 'utf16'):
         deck_file = tmpdir.join('deck').join(encoding)
         deck_file.write_text(deck_text, encoding=encoding, ensure=True)
 
-    repo = Repo.init(str(tmpdir))
+    repo = Repo.init(tmpdir.strpath)
     repo.stage([b'test_file', b'deck/utf8', b'deck/utf16'])
     repo.do_commit(b'initial',
                    committer=b'Te-je Rodgers <tjd.roders@gmail.com>')
@@ -31,9 +32,9 @@ def repo(tmpdir):
 @pytest.mark.parametrize('interactive', [True, False])
 @pytest.mark.parametrize('encoding', ['utf8', 'utf16'])
 @pytest.mark.parametrize('search,sub', [
-    ('\u2660', 'S'),
-    ('\u2665', '\u2661'),
-    ('\u2666', 'of Diamonds')
+    (u'\u2660', u'S'),
+    (u'\u2665', u'\u2661'),
+    (u'\u2666', u'of Diamonds')
 ])
 def test_replace_unicode_cards(mocker, repo, tmpdir, interactive, encoding,
                                search, sub):
@@ -48,9 +49,9 @@ def test_replace_unicode_cards(mocker, repo, tmpdir, interactive, encoding,
 
 @pytest.mark.parametrize('encoding', ['utf8', 'utf16'])
 @pytest.mark.parametrize('search,sub', [
-    ('\u2660', 'S'),
-    ('\u2665', '\u2661'),
-    ('\u2666', 'of Diamonds')
+    (u'\u2660', 'S'),
+    (u'\u2665', '\u2661'),
+    (u'\u2666', 'of Diamonds')
 ])
 def test_replace_unicode_cards_reject_interactive(
         mocker, repo, tmpdir, encoding, search, sub):
@@ -70,15 +71,15 @@ def test_interactive_specific_items(mocker, repo, tmpdir):
 
     test_file = tmpdir.join('test_file')
     new_text = test_file.read()
-    expected_text = "For hErE we have\nA tEst filE\nwith only usElEss stuff\n"
+    expected_text = u"For hErE we have\nA tEst filE\nwith only usElEss stuff\n"
 
     assert new_text == expected_text
 
 
 @pytest.mark.parametrize('search,sub', [
-    ('\u2660', 'S'),
-    ('\u2665', '\u2661'),
-    ('\u2666', 'of Diamonds')
+    (u'\u2660', 'S'),
+    (u'\u2665', '\u2661'),
+    (u'\u2666', 'of Diamonds')
 ])
 def test_chardet_threshold(mocker, repo, tmpdir, search, sub):
     find_and_replace(search, sub, repo=str(tmpdir),

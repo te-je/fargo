@@ -9,4 +9,4 @@ def test_show_version(capsys):
     assert exc_info.value.code == 0
 
     out, err = capsys.readouterr()
-    assert out == __version__ + "\n"
+    assert out.strip() == __version__
