@@ -36,7 +36,7 @@ def _check_and_show_version(_, __, is_set):
               help='run in interactive mode')
 @click.argument('search', nargs=1)
 @click.argument('replacement', required=False)
-@click.argument('repo', nargs=1, required=False, default='.',
+@click.argument('repo', nargs=1, required=False, default=u'.',
                 type=click.Path(file_okay=False))
 def main(**kwargs):
     #kwargs['verbosity'] = verbose
@@ -65,7 +65,7 @@ def find_and_replace(search, replacement, repo='.', chardet_threshold=0.95,
         have have different meanings.
     """
 
-    replacement = replacement or ""
+    replacement = replacement or u""
 
     for filename in _iter_repo_files(repo):
         contents = _get_file_contents(
@@ -84,10 +84,10 @@ def find_and_replace(search, replacement, repo='.', chardet_threshold=0.95,
         line_iter = _iter_occurences_by_line(search, text, use_regex)
         for lineno, matches in line_iter:
             # Where does this line start in the text?
-            cursor = len("".join(lines[:lineno - 1]))
+            cursor = len(u"".join(lines[:lineno - 1]))
 
             # Do the preliminary output for this line
-            click.echo('{}:L{}:'.format(filename, lineno), nl=False)
+            click.echo(u'{}:L{}:'.format(filename, lineno), nl=False)
 
             # Process this line
             chunks = _get_line_chunks(
@@ -116,13 +116,13 @@ def find_and_replace(search, replacement, repo='.', chardet_threshold=0.95,
                 ]
 
             # Rebuild the line from the chunks
-            changed_line = ''.join(
-                ''.join((unchanged, new)) for unchanged, _, new in chunks
+            changed_line = u''.join(
+                u''.join((unchanged, new)) for unchanged, _, new in chunks
             )
             changed_lines.append((lineno, changed_line))
 
         for lineno, line in changed_lines: lines[lineno - 1] = line
-        updated_text = ''.join(lines)
+        updated_text = u''.join(lines)
 
         if text != updated_text:
             with open(filename, 'wb') as fh:
@@ -164,7 +164,7 @@ def _get_line_chunks(matches, cursor, replacement, text, use_regex):
         cursor = match.end()
 
     # Finally, add the item after the last match
-    end = text.find("\n", cursor)
+    end = text.find(u"\n", cursor)
     unchanged = text[cursor:] if end == -1 else text[cursor: end + 1]
     deltas.append([unchanged, '', ''])
 
@@ -172,12 +172,12 @@ def _get_line_chunks(matches, cursor, replacement, text, use_regex):
 
 
 def _prompt_replace_items(count):
-    ans = click.prompt("Accept replacements?", default='yes')
+    ans = click.prompt(u"Accept replacements?", default=u'yes')
 
-    if 'yes'.startswith(ans.lower()):
+    if u'yes'.startswith(ans.lower()):
         return range(count)
 
-    elif 'no'.startswith(ans.lower()):
+    elif u'no'.startswith(ans.lower()):
         return range(0)
 
     else:
@@ -199,7 +199,7 @@ def _iter_occurences_by_line(search, text, use_regex=False):
     curline = 0
 
     for match in _iter_occurences(search, text, use_regex=use_regex):
-        lineno = text.count("\n", 0, match.start()) + 1
+        lineno = text.count(u"\n", 0, match.start()) + 1
 
         if curline != lineno and cache:
             yield curline, cache
