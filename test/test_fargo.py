@@ -1,4 +1,3 @@
-import sys
 import pytest
 from dulwich.repo import Repo
 from fargo import find_and_replace
@@ -14,7 +13,9 @@ deck_text = u"This here is a deck of cards man:\n\n{}".format(
 @pytest.fixture
 def repo(tmpdir):
     test_file = tmpdir.join('test_file')
-    test_file.write(u"For here we have\nA test file\nwith only useless stuff\n")
+    test_file.write(
+        u"For here we have\nA test file\nwith only useless stuff\n"
+    )
 
     # Add some unicode data
     for encoding in ('utf8', 'utf16'):
