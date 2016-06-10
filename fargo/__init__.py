@@ -39,13 +39,13 @@ def _check_and_show_version(_, __, is_set):
 @click.argument('repo', nargs=1, required=False, default=u'.',
                 type=click.Path(file_okay=False))
 def main(**kwargs):
-    #kwargs['verbosity'] = verbose
     kwargs.pop('version')
     find_and_replace(**kwargs)
 
 
 def find_and_replace(search, replacement, repo='.', chardet_threshold=0.95,
-                     fallback_encoding=None, interactive=False, use_regex=False):
+                     fallback_encoding=None, interactive=False,
+                     use_regex=False):
     """Find and replace items inside tracked files
 
     :param search: The text to search for. If ``use_regex`` is truthy, then
@@ -121,12 +121,13 @@ def find_and_replace(search, replacement, repo='.', chardet_threshold=0.95,
             )
             changed_lines.append((lineno, changed_line))
 
-        for lineno, line in changed_lines: lines[lineno - 1] = line
+        # Compute the updated text
+        for lineno, line in changed_lines:
+            lines[lineno - 1] = line
         updated_text = u''.join(lines)
 
         if text != updated_text:
-            with open(filename, 'wb') as fh:
-                fh.write(updated_text.encode(encoding))
+            _put_file_contents(filename, updated_text, encoding)
 
 
 def _get_file_contents(filename, chardet_threshold, fallback_encoding):
@@ -149,6 +150,19 @@ def _get_file_contents(filename, chardet_threshold, fallback_encoding):
         return None
     else:
         return encoding, text
+
+
+def _put_file_contents(filename, text, encoding):
+    # Try to encode text with the encoding. If successful, write it out
+    # to the file. Avoids overwriting a file when the text can't be
+    # encoded
+    try:
+        data = text.encode(encoding)
+    except UnicodeEncodeError:
+        return
+    else:
+        with open(filename, 'wb') as fh:
+            fh.write(data)
 
 
 def _get_line_chunks(matches, cursor, replacement, text, use_regex):
@@ -185,7 +199,8 @@ def _prompt_replace_items(count):
             repl_only = []
             for num in ans.split():
                 ind = int(num.strip())
-                if ind not in range(count): raise IndexError
+                if ind not in range(count):
+                    raise IndexError
                 repl_only.append(ind)
         except:
             return _prompt_replace_items(count)
@@ -221,7 +236,6 @@ def _iter_repo_files(repo):
 
 def _iter_occurences(search, text, use_regex=False):
     pattern = re.compile(search if use_regex else re.escape(search))
-    last_index = 0
 
     match = pattern.search(text)
 

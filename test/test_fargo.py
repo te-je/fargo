@@ -7,7 +7,7 @@ from fargo import find_and_replace
 suits = [u'\u2660', u'\u2665', u'\u2666', u'\u2663']
 ranks = list(str(i) for i in range(2, 11)) + ['J', 'Q', 'K', 'A']
 deck_text = u"This here is a deck of cards man:\n\n{}".format(
-    "\n".join(''.join((r,s)) for s in suits for r in ranks)
+    "\n".join(''.join((r, s)) for s in suits for r in ranks)
 )
 
 
@@ -23,7 +23,8 @@ def repo(tmpdir):
 
     repo = Repo.init(tmpdir.strpath)
     repo.stage([b'test_file', b'deck/utf8', b'deck/utf16'])
-    repo.do_commit(b'initial')
+    repo.do_commit(b'initial',
+                   committer=b'Te-je Rodgers <tjd.roders@gmail.com>')
 
     return repo
 
