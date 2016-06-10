@@ -43,7 +43,7 @@ def main(**kwargs):
     find_and_replace(**kwargs)
 
 
-def find_and_replace(search, replacement, repo='.', chardet_threshold=0.95,
+def find_and_replace(search, replacement, repo='.', chardet_threshold=0.85,
                      fallback_encoding=None, interactive=False,
                      use_regex=False):
     """Find and replace items inside tracked files
