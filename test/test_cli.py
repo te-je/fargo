@@ -14,12 +14,25 @@ def test_version(mocker, args):
     with pytest.raises(SystemExit):
         main(args)
 
-    assert show_version.called_once_with()
+    show_version.assert_called_once_with()
 
 
 @pytest.mark.parametrize('args, expected_args, expected_kwargs', [
-    (['foo', 'bar'], ('foo', 'bar'), {'repo': '.'}),
-    (['foo', 'bar', 'repo'], ('foo', 'bar'), {'repo': 'repo'})
+    (['foo', 'bar'], (),
+     {'repo': u'.', 'search': u'foo', 'replacement': u'bar',
+      'interactive': False}),
+
+    (['-i', 'foo', 'bar'], (),
+     {'repo': u'.', 'search': u'foo', 'replacement': u'bar',
+      'interactive': True}),
+
+    (['--interactive', 'foo', 'bar'], (),
+     {'repo': u'.', 'search': u'foo', 'replacement': u'bar',
+      'interactive': True}),
+
+    (['foo', 'bar', 'repo'], (),
+     {'repo': 'repo', 'search': u'foo', 'replacement': u'bar',
+      'interactive': False})
 ])
 def test_find_and_replace(mocker, args, expected_args, expected_kwargs):
     far = mocker.patch('fargo.find_and_replace')
@@ -27,4 +40,4 @@ def test_find_and_replace(mocker, args, expected_args, expected_kwargs):
     with pytest.raises(SystemExit):
         main(args)
 
-    assert far.called_once_with(*expected_args, **expected_kwargs)
+    far.assert_called_once_with(*expected_args, **expected_kwargs)
