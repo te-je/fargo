@@ -48,6 +48,30 @@ def test_replace_unicode_cards(mocker, repo, tmpdir, interactive, encoding,
     assert deck_text.replace(search, sub) == new_deck_text
 
 
+@pytest.mark.parametrize('interactive', [True, False])
+@pytest.mark.parametrize('enc', ['utf8', 'utf16'])
+@pytest.mark.parametrize('search,sub', [
+    (u'([2-9]|10|J|Q|K|A)(\u2660|\u2665|\u2666|\u2663)',  u'\\2\\1'),
+    (u'(?P<rank>[2-9]|10|J|Q|K|A)(?P<suit>\u2660|\u2665|\u2666|\u2663)',
+     u'\\g<suit>\\g<rank>')
+])
+def test_regex_replace_unicode_cards(mocker, repo, tmpdir, enc, interactive,
+                                     search, sub):
+    mocker.patch('fargo.click.prompt').return_value = 'yes'
+    find_and_replace(
+        search, sub,
+        use_regex=True, repo=str(tmpdir), interactive=interactive
+    )
+
+    deck_file = tmpdir.join('deck').join(enc)
+    new_deck_text = deck_file.read_text(encoding=enc)
+    expected_deck_text = u"This here is a deck of cards man:\n\n{}".format(
+        "\n".join(''.join((s, r)) for s in suits for r in ranks)
+    )
+
+    assert new_deck_text == expected_deck_text
+
+
 @pytest.mark.parametrize('encoding', ['utf8', 'utf16'])
 @pytest.mark.parametrize('search,sub', [
     (u'\u2660', 'S'),

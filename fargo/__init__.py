@@ -32,6 +32,8 @@ def _check_and_show_version(_, __, is_set):
 @click.option('--version', '-V', is_flag=True,
               help="show the version number and exit.",
               callback=_check_and_show_version)
+@click.option('--use-regex', '-P', is_flag=True, default=False,
+              help='Enable regex pattern matching (disabled by default).')
 @click.option('--interactive', '-i', is_flag=True,
               help='run in interactive mode')
 @click.argument('search', nargs=1)
@@ -103,7 +105,7 @@ def find_and_replace(search, replacement, repo='.', chardet_threshold=0.85,
                     click.secho(new, bg='green', nl=False)
 
             # Special case for file that doesn't end in newline
-            if unchanged[-1] not in ('\n', '\r'):
+            if unchanged[-1:] not in ('\n', '\r'):
                 click.echo('')
 
             if interactive:

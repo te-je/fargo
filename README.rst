@@ -35,7 +35,7 @@ Usage
 
 ::
 
-  fargo [-i] <text> [<substitution>] [<repository>]
+  fargo [-iP] <text> [<substitution>] [<repository>]
 
 The program scans the tracked files inside a local git repository found at
 ``<repository>`` and replaces all occurrences of ``<text>`` with
@@ -47,13 +47,20 @@ Option/Argument     Description                                   Default
 ``<text>``          This is the text that is scanned inside the
                     Git repository.
 ------------------  -------------------------------------------   ---------------------------------------
-``<substitution>``  Occurrences of ``<text>`` will be replaced    If this is omitted, then occrrences of
+``<substitution>``  Occurrences of ``<text>`` will be replaced    If this is omitted, then occurrences of
                     by this.                                      ``<text>`` are **removed**.
 ------------------  -------------------------------------------   ---------------------------------------
 ``<repository>``    A local Git repository that is scanned for    If not given, the current directory is
                     occurrences of ``<text>``.                    used (must be a Git repository).
 ------------------  -------------------------------------------   ---------------------------------------
+``-P``              Enable regex patterns. If set,
+                    ``<substitution>`` can include capture
+                    groups from the regular expression given in
+                    ``<text>``.
+------------------  -------------------------------------------   ---------------------------------------
 ``-i``              Run in interactive mode.
+------------------  -------------------------------------------   ---------------------------------------
+``--help``          Show program help and exit
 ==================  ===========================================   =======================================
 
 
@@ -88,6 +95,19 @@ Instead of accepting or rejecting all of the substitutions wholesale, specific
 substitutions can be accepted by entering a space separated list of their
 sequence numbers. For example, entering ``2`` above will result in the line:
 :literal:`\ is not the same as meeting ME in person. It's`.
+
+
+Regular expressions
+~~~~~~~~~~~~~~~~~~~
+
+To turn on regular expressions, use the ``-P`` switch. Regular expressions
+allow the use of capture groups inside subsitutions::
+
+  > fargo -P "Name: (\w+) (\w+)" "Name: \2, \1"
+
+Or, you can use named capture groups like so::
+
+  > fargo -P "Name: (?P<first>\w+) (?P<last>\w+)" "Name: \g<last>, \g<first>"
 
 
 Unicode support
